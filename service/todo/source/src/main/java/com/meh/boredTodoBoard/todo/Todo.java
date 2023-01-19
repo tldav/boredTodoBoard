@@ -1,30 +1,34 @@
 package com.meh.boredTodoBoard.todo;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+
+import java.util.UUID;
 
 @Entity
 public class Todo {
     
     @Id
-    private String id;
+    @GeneratedValue
+    private UUID id;
     private String title;
     private String body;
     
     public Todo() {
     }
     
-    public Todo(String id, String title, String body) {
+    public Todo(UUID id, String title, String body) {
         this.id = id;
         this.title = title;
         this.body = body;
     }
     
-    public String getId() {
+    public UUID getId() {
         return id;
     }
     
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
     
