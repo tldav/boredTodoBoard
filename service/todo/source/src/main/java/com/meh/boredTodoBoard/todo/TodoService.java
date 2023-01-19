@@ -19,6 +19,10 @@ public class TodoService {
         return todos;
     }
     
+    public Todo getTodo(Long id) {
+        return this.todoRepository.findById(id).orElse(null);
+    }
+    
     public void addTodo(Todo todo) {
         this.todoRepository.save(todo);
     }
