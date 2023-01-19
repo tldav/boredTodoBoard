@@ -4,31 +4,29 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
-import java.util.UUID;
-
 @Entity
 public class Todo {
     
     @Id
     @GeneratedValue
-    private UUID id;
+    private Long id;
     private String title;
     private String body;
     
     public Todo() {
     }
     
-    public Todo(UUID id, String title, String body) {
+    public Todo(Long id, String title, String body) {
         this.id = id;
         this.title = title;
         this.body = body;
     }
     
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
     
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
     
