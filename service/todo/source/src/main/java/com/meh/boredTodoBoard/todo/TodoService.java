@@ -18,4 +18,8 @@ public class TodoService {
         this.todoRepository.findAll().forEach(todo -> todos.add(todo));
         return todos;
     }
+    
+    public void addTodo(Todo todo) {
+        this.todoRepository.save(todo);
+    }
 }
