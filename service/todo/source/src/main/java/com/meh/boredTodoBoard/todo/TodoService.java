@@ -26,4 +26,15 @@ public class TodoService {
     public void addTodo(Todo todo) {
         this.todoRepository.save(todo);
     }
+    
+    public void updateTodo(Long id, Todo todo) {
+        if (todoRepository.findById(id).isEmpty()) return;
+        todo.setId(id);
+        todoRepository.save(todo);
+    }
+    
+    public void deleteTodo(Long id) {
+        if (todoRepository.findById(id).isEmpty()) return;
+        this.todoRepository.deleteById(id);
+    }
 }

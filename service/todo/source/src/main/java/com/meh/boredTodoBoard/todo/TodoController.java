@@ -11,7 +11,7 @@ public class TodoController {
     private TodoService todoService;
     
     @RequestMapping("/todo")
-    public List<Todo> getAllTopics() {
+    public List<Todo> getAllTodos() {
         return this.todoService.getAllTodos();
     }
     
@@ -24,5 +24,15 @@ public class TodoController {
     public void addTodo(@RequestBody Todo todo) {
         this.todoService.addTodo(todo);
     }
-
+    
+    @RequestMapping(method = RequestMethod.PUT, value = "/todo/{id}")
+    public void updateTodo(@PathVariable Long id, @RequestBody Todo todo) {
+        this.todoService.updateTodo(id, todo);
+    }
+    
+    @RequestMapping(method = RequestMethod.DELETE, value = "/todo/{id}")
+    public void deleteTodo(@PathVariable Long id) {
+        this.todoService.deleteTodo(id);
+    }
+    
 }
