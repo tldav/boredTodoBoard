@@ -21,8 +21,9 @@ public class TodoController {
     }
     
     @RequestMapping(method = RequestMethod.POST, value = "/todo")
-    public void addTodo(@RequestBody Todo todo) {
+    public Todo addTodo(@RequestBody Todo todo) {
         this.todoService.addTodo(todo);
+        return todo;
     }
     
     @RequestMapping(method = RequestMethod.PUT, value = "/todo/{id}")
