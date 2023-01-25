@@ -4,6 +4,8 @@ import requests as api
 import json
 from tkinter import ttk
 
+
+
 ##### API
 
 API_URL = "http://localhost:8000/todo"
@@ -35,20 +37,29 @@ root = ctk.CTk()
 root.winfo_toplevel().title("Bored Todo Board")
 root.geometry("800x800")
 
+##### Style
+style = ttk.Style(root)
+style.theme_use("clam")
+style.configure("Treeview", background="#3b3b3b", foreground="white", fieldbackground="#3b3b3b")
+style.configure("Treeview.Heading", background="#2b2b2b", foreground="white", font=("Roboto", 10))
+style.layout("Treeview", [
+    ('Treeview.treearea', {'sticky': 'nswe'})
+])
+
 ##### Todos Display region
 todoTable = ttk.Treeview(root)
 todoTable["show"] = "headings" # hides default first column
 todoTable['columns'] = ("Todo", "Description")
 
-todoTable.column("Todo", anchor=tk.W, width=150, minwidth=25)
-todoTable.column("Description", anchor=tk.W, width=250, minwidth=25)
+todoTable.column("Todo", anchor=tk.W)
+todoTable.column("Description", anchor=tk.W, minwidth=25)
 todoTable.heading("Todo", text="Todo", anchor=tk.W)
 todoTable.heading("Description", text="Description", anchor=tk.W)
 
 for todo in fetchTodos():
   todoTable.insert(parent="", index="end", iid=todo["id"], text="", values=(todo["title"], todo["body"]))
 
-todoTable.pack(pady=20)
+todoTable.pack(pady=20, padx=40, fill=tk.BOTH, expand=True)
 
 ##### Edit/Add Todo region
 addTodoFrame = ctk.CTkFrame(root)
