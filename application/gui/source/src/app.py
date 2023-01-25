@@ -1,15 +1,32 @@
 import tkinter as tk
 import customtkinter as ctk
-import requests as req
+import requests as api
 import json
 from tkinter import ttk
 
 ##### API
-try:
-  res = req.get("http://localhost:8000/todo")
-  todos = json.loads(res.text)
-except Exception as e:
-  print(e)
+
+API_URL = "http://localhost:8000/todo"
+
+def fetchTodos():
+  try:
+    res = api.get(API_URL)
+    todos = json.loads(res.text)
+    return todos
+  except Exception as e:
+    print(e)
+
+def postTodo(todo):
+  reqBody = {
+    "title": todo["title"],
+    "body": todo["body"]
+  }
+  try:
+    res = api.post(url = API_URL, json = reqBody)
+    return json.loads(res.text)
+  except Exception as e:
+    print(e)
+
 
 ##### TKInter initialization
 ctk.set_appearance_mode("dark")
@@ -28,7 +45,7 @@ todoTable.column("Description", anchor=tk.W, width=250, minwidth=25)
 todoTable.heading("Todo", text="Todo", anchor=tk.W)
 todoTable.heading("Description", text="Description", anchor=tk.W)
 
-for todo in todos:
+for todo in fetchTodos():
   todoTable.insert(parent="", index="end", iid=todo["id"], text="", values=(todo["title"], todo["body"]))
 
 todoTable.pack(pady=20)
@@ -61,9 +78,16 @@ descriptionInput.grid(row=3, column=0, pady=(0, 15))
 # descriptionInput.grid_columnconfigure(0, weight=1)
 
 
+#### Add and Update Todos Region
+def addTodo():
+  todo = postTodo({"title": titleInput.get(), "body": descriptionInput.get("1.0", "end-1c")})
+  todoTable.insert(parent="", index="end", iid=todo["id"], text="", values=(todo["title"], todo["body"]))
+  titleInput.delete(0, tk.END)
+  descriptionInput.delete("1.0", tk.END)
+
 
 ##### 
-addTodo ctk.CTkButton(root, text="Add Todo", addTodo)
+addTodo = ctk.CTkButton(root, text="Add Todo", command=addTodo)
 addTodo.pack(pady=20)
 
 
