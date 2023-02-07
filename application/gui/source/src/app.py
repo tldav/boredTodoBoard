@@ -1,6 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
 import src.service.todo as api
+import src.style.style as style
 from tkinter import ttk
 
 # TKInter initialization
@@ -10,16 +11,17 @@ root = ctk.CTk()
 root.winfo_toplevel().title("Bored Todo Board")
 root.geometry("800x800")
 
+
+style.apply(root)
+
+
 # Style
-style = ttk.Style(root)
-style.theme_use("clam")
-style.configure("Treeview", background="#3b3b3b",
-                foreground="white", fieldbackground="#3b3b3b")
-style.configure("Treeview.Heading", background="#2b2b2b",
-                foreground="white", font=("Roboto", 10))
-style.layout("Treeview", [
-    ('Treeview.treearea', {'sticky': 'nswe'})
-])
+# style = ttk.Style(root)
+# style.theme_use("clam")
+# style.configure("Treeview", background="#3b3b3b", foreground="white", fieldbackground="#3b3b3b")
+# style.configure("Treeview.Heading", background="#2b2b2b", foreground="white", font=("Roboto", 10))
+# style.layout("Treeview", [('Treeview.treearea', {'sticky': 'nswe'})
+# ])
 
 # Todos Display region
 todoTable = ttk.Treeview(root)
