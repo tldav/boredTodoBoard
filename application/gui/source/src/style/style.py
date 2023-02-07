@@ -1,6 +1,5 @@
 from tkinter import ttk
 
-
 def apply(element):
   style = ttk.Style(element)
   root(style)
