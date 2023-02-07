@@ -1,42 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
-import requests as api
-import json
+import src.service.todo as api
 from tkinter import ttk
-
-
-# API
-API_URL = "http://localhost:8000/todo"
-
-
-def fetchTodos():
-    try:
-        res = api.get(API_URL)
-        todos = json.loads(res.text)
-        return todos
-    except Exception as e:
-        print(e)
-
-
-def postTodo(todo):
-    reqBody = {
-        "title": todo["title"],
-        "body": todo["body"]
-    }
-    try:
-        res = api.post(url=API_URL, json=reqBody)
-        return json.loads(res.text)
-    except Exception as e:
-        print(e)
-
-
-def deleteTodo(id):
-    url = "{}/{}".format(API_URL, id)
-    try:
-      api.delete(url)
-    except Exception as e:
-        print(e)
-
 
 # TKInter initialization
 ctk.set_appearance_mode("dark")
@@ -66,7 +31,7 @@ todoTable.column("Description", anchor=tk.W, width=300, minwidth=100)
 todoTable.heading("Task", text="Task", anchor=tk.W)
 todoTable.heading("Description", text="Description", anchor=tk.W)
 
-for todo in fetchTodos():
+for todo in api.fetchTodos():
     todoTable.insert(parent="", index="end", iid=todo["id"], text="", values=(
         todo["title"], todo["body"]))
 
@@ -87,11 +52,12 @@ def onDoubleClick(event):
 
   columnBox = todoTable.bbox(selectedId, column)
   print(columnBox)
-  # titleEdit = ctk.CTkEntry(todoTable)
-  # titleEdit.place(x=columnBox[0], y=columnBox[1], w=columnBox[2], h=columnBox[3])
 
   editTodoWindow = ctk.CTkToplevel(root)
   editTodoWindow.geometry("400x400")
+
+  editTodoWindow.wait_visibility()
+  editTodoWindow.grab_set()
   editTodo = ctk.CTkFrame(editTodoWindow)
   editTodo.pack(fill="none", expand=True)
 
@@ -106,7 +72,6 @@ def onDoubleClick(event):
   descriptionInput = ctk.CTkTextbox(editTodo)
   descriptionInput.grid(row=3, column=0, pady=(0, 15))
 
-  # editTodo.place(x=columnBox[0], y=columnBox[1], w=columnBox[2], h=columnBox[3])
 
   editTodoBtn = ctk.CTkButton(editTodoWindow, text="Update Task", command=print)
   editTodoBtn.pack(pady=(0, 20))
@@ -122,7 +87,7 @@ def removeTodo():
     id = todoTable.focus()
     if id:
         todoTable.delete(id)
-        deleteTodo(id)
+        api.deleteTodo(id)
 
 removeTodoBtn = ctk.CTkButton(
     root, text="Delete Task", command=removeTodo, fg_color="#A80E11", hover_color="#8B0D0D")
@@ -136,7 +101,7 @@ def addTodo():
   if not titleInput.get().strip() and not descriptionInput.get("1.0", "end-1c").strip():
     return
 
-  todo = postTodo({"title": titleInput.get(),
+  todo = api.postTodo({"title": titleInput.get(),
                   "body": descriptionInput.get("1.0", "end-1c")})
   todoTable.insert(parent="", index="end", iid=todo["id"], text="", values=(
       todo["title"], todo["body"]))
