@@ -33,7 +33,7 @@ def postTodo(todo):
 def deleteTodo(id):
     url = "{}/{}".format(API_URL, id)
     try:
-        res = api.delete(url)
+      api.delete(url)
     except Exception as e:
         print(e)
 
@@ -72,14 +72,57 @@ for todo in fetchTodos():
 
 todoTable.pack(pady=20, padx=40, fill=tk.BOTH, expand=True)
 
+# Double Click in Todo Region
+def onDoubleClick(event):
+  regionClicked = todoTable.identify_region(event.x, event.y)
+  if (regionClicked not in ("cell")):
+    return
 
-# Delete Todo button
+  column = todoTable.identify_column(event.x)
+  columnIndex = int(column[1:]) - 1
+
+  selectedId = todoTable.focus()
+  selectedText = todoTable.item(selectedId).get("values")[columnIndex]
+
+
+  columnBox = todoTable.bbox(selectedId, column)
+  print(columnBox)
+  # titleEdit = ctk.CTkEntry(todoTable)
+  # titleEdit.place(x=columnBox[0], y=columnBox[1], w=columnBox[2], h=columnBox[3])
+
+  editTodoWindow = ctk.CTkToplevel(root)
+  editTodoWindow.geometry("400x400")
+  editTodo = ctk.CTkFrame(editTodoWindow)
+  editTodo.pack(fill="none", expand=True)
+
+  titleLabel = ctk.CTkLabel(editTodo, text="Title")
+  titleLabel.grid(row=0, column=0, padx=150)
+  titleInput = ctk.CTkEntry(editTodo)
+  titleInput.grid(row=1, column=0)
+
+
+  descriptionLabel = ctk.CTkLabel(editTodo, text="Description")
+  descriptionLabel.grid(row=2, column=0)
+  descriptionInput = ctk.CTkTextbox(editTodo)
+  descriptionInput.grid(row=3, column=0, pady=(0, 15))
+
+  # editTodo.place(x=columnBox[0], y=columnBox[1], w=columnBox[2], h=columnBox[3])
+
+  editTodoBtn = ctk.CTkButton(editTodoWindow, text="Update Task", command=print)
+  editTodoBtn.pack(pady=(0, 20))
+
+
+
+
+todoTable.bind("<Double-1>", onDoubleClick)
+
+
+# Delete Todo
 def removeTodo():
     id = todoTable.focus()
     if id:
         todoTable.delete(id)
         deleteTodo(id)
-
 
 removeTodoBtn = ctk.CTkButton(
     root, text="Delete Task", command=removeTodo, fg_color="#A80E11", hover_color="#8B0D0D")
@@ -87,23 +130,8 @@ removeTodoBtn = ctk.CTkButton(
 removeTodoBtn.pack(pady=(0, 20))
 
 
-# Edit/Add Todo region
-addTodoFrame = ctk.CTkFrame(root)
-addTodoFrame.pack(pady=20)
 
-titleLabel = ctk.CTkLabel(addTodoFrame, text="Title")
-titleLabel.grid(row=0, column=0, padx=150)
-titleInput = ctk.CTkEntry(addTodoFrame)
-titleInput.grid(row=1, column=0)
-
-
-descriptionLabel = ctk.CTkLabel(addTodoFrame, text="Description")
-descriptionLabel.grid(row=2, column=0)
-descriptionInput = ctk.CTkTextbox(addTodoFrame)
-descriptionInput.grid(row=3, column=0, pady=(0, 15))
-
-
-# Add and Update Todos Region
+# Add Todo
 def addTodo():
   if not titleInput.get().strip() and not descriptionInput.get("1.0", "end-1c").strip():
     return
@@ -115,8 +143,25 @@ def addTodo():
   titleInput.delete(0, tk.END)
   descriptionInput.delete("1.0", tk.END)
 
-
 addTodoBtn = ctk.CTkButton(root, text="Add Task", command=addTodo)
+
+
+# Edit/Add Todo region
+addTodoRegion = ctk.CTkFrame(root)
+addTodoRegion.pack(pady=20)
+
+titleLabel = ctk.CTkLabel(addTodoRegion, text="Title")
+titleLabel.grid(row=0, column=0, padx=150)
+titleInput = ctk.CTkEntry(addTodoRegion)
+titleInput.grid(row=1, column=0)
+
+
+descriptionLabel = ctk.CTkLabel(addTodoRegion, text="Description")
+descriptionLabel.grid(row=2, column=0)
+descriptionInput = ctk.CTkTextbox(addTodoRegion)
+descriptionInput.grid(row=3, column=0, pady=(0, 15))
+
+# Render add todo button
 addTodoBtn.pack(pady=(0, 20))
 
 
