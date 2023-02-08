@@ -1,7 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
-from tkinter import ttk
 from widget.TaskTreeView import TaskTreeView
+from widget.TaskForm import TaskForm
 import service.todo as api
 import style.style as style
 
@@ -17,19 +17,9 @@ style.apply(root)
 
 todoTable = TaskTreeView(root)
 
-# Todos Display region
-# todoTable = ttk.Treeview(root)
-# todoTable["show"] = "headings"  # hides default first column
-# todoTable['columns'] = ("Task", "Description")
-
-# todoTable.column("Task", anchor=tk.W, width=75, minwidth=25)
-# todoTable.column("Description", anchor=tk.W, width=300, minwidth=100)
-# todoTable.heading("Task", text="Task", anchor=tk.W)
-# todoTable.heading("Description", text="Description", anchor=tk.W)
-
 for todo in api.fetchTodos():
-    todoTable.insert(parent="", index="end", iid=todo["id"], text="", values=(
-        todo["title"], todo["body"]))
+  todoTable.insertTask(todo["id"], todo["title"], todo["body"])
+    # todoTable.insert(parent="", index="end", iid=todo["id"], text="", values=(todo["title"], todo["body"]))
 
 # Double Click in Todo Region
 def onDoubleClick(event):
@@ -51,26 +41,14 @@ def onDoubleClick(event):
   editTodoWindow = ctk.CTkToplevel(root)
   editTodoWindow.title("Edit Task: " + todoTable.item(selectedId).get("values")[0])
   editTodoWindow.geometry("400x400")
-
   editTodoWindow.wait_visibility()
   editTodoWindow.grab_set()
-  editTodo = ctk.CTkFrame(editTodoWindow)
-  editTodo.pack(fill="none", expand=True)
 
-  titleLabel = ctk.CTkLabel(editTodo, text="Title")
-  titleLabel.grid(row=0, column=0, padx=150)
-  titleInput = ctk.CTkEntry(editTodo)
-  titleInput.grid(row=1, column=0)
-
-
-  descriptionLabel = ctk.CTkLabel(editTodo, text="Description")
-  descriptionLabel.grid(row=2, column=0)
-  descriptionInput = ctk.CTkTextbox(editTodo)
-  descriptionInput.grid(row=3, column=0, pady=(0, 15))
-
+  TaskForm(editTodoWindow)
 
   editTodoBtn = ctk.CTkButton(editTodoWindow, text="Update Task", command=print)
   editTodoBtn.pack(pady=(0, 20))
+
 
 
 
@@ -99,8 +77,7 @@ def addTodo():
 
   todo = api.postTodo({"title": titleInput.get(),
                   "body": descriptionInput.get("1.0", "end-1c")})
-  todoTable.insert(parent="", index="end", iid=todo["id"], text="", values=(
-      todo["title"], todo["body"]))
+  todoTable.insertTask(todo["id"], todo["title"], todo["body"])
   titleInput.delete(0, tk.END)
   descriptionInput.delete("1.0", tk.END)
 
@@ -121,6 +98,17 @@ descriptionLabel = ctk.CTkLabel(addTodoRegion, text="Description")
 descriptionLabel.grid(row=2, column=0)
 descriptionInput = ctk.CTkTextbox(addTodoRegion)
 descriptionInput.grid(row=3, column=0, pady=(0, 15))
+
+
+# print(addTodoRegion.winfo_children())
+# print("-------------------")
+# print("-------------------")
+# print("-------------------")
+# print(addTodoRegion.children)
+# print("-------------------")
+# print("-------------------")
+# print("-------------------")
+# print(addTodoRegion.nametowidget("!ctklabel"))
 
 # Render add todo button
 addTodoBtn.pack(pady=(0, 20))

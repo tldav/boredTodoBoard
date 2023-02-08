@@ -13,3 +13,6 @@ class TaskTreeView(ttk.Treeview):
     self.column("Description", anchor=tk.W, width=300, minwidth=100)
     self.heading("Task", text="Task", anchor=tk.W)
     self.heading("Description", text="Description", anchor=tk.W)
+
+  def insertTask(self, id, title, body):
+    self.insert(parent="", index="end", iid=id, text="", values=(title, body))
