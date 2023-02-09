@@ -26,18 +26,3 @@ class TaskTreeView(ttk.Treeview):
     if id:
       self.delete(id)
       api.deleteTodo(id)
-
-
-
-
-
-  # def createTask(self, titleInput, descInput):
-  #   if not titleInput.get().strip() and not descInput.get("1.0", "end-1c").strip():
-  #     return
-
-  #   todo = api.postTodo({"title": titleInput.get(), "body": descInput.get("1.0", "end-1c")})
-
-  #   self.__insertTask(todo["id"], todo["title"], todo["body"])
-
-  #   titleInput.delete(0, "end")
-  #   descInput.delete("1.0", "end")

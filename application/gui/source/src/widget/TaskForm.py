@@ -39,6 +39,5 @@ class TaskForm(ctk.CTkFrame):
     if not titleInput.get().strip() and not descriptionInput.get("1.0", "end-1c").strip():
       return
     task = api.putTodo(self.taskId, {"title": titleInput.get(), "body": descriptionInput.get("1.0", "end-1c")})
-    print(task)
     self.parent.treeview.item(self.taskId, text="", values=(task["title"], task["body"]))
     self.parent.destroy()
