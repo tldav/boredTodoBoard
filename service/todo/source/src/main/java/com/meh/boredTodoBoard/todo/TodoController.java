@@ -27,8 +27,9 @@ public class TodoController {
     }
     
     @RequestMapping(method = RequestMethod.PUT, value = "/todo/{id}")
-    public void updateTodo(@PathVariable Long id, @RequestBody Todo todo) {
+    public Todo updateTodo(@PathVariable Long id, @RequestBody Todo todo) {
         this.todoService.updateTodo(id, todo);
+        return todo;
     }
     
     @RequestMapping(method = RequestMethod.DELETE, value = "/todo/{id}")
