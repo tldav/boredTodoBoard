@@ -20,15 +20,26 @@ def postTodo(todo):
         "body": todo["body"]
     }
     try:
-        res = req.post(url=API_URL, json=reqBody)
-        return json.loads(res.text)
+      res = req.post(url=API_URL, json=reqBody)
+      return json.loads(res.text)
     except Exception as e:
         print(e)
 
+def putTodo(id, todo):
+  url = "{}/{}".format(API_URL, id)
+  reqBody = {
+      "title": todo["title"],
+      "body": todo["body"]
+  }
+  try:
+    res = req.put(url=url, json=reqBody)
+    return json.loads(res.text)
+  except Exception as e:
+    print(e)
 
 def deleteTodo(id):
-    url = "{}/{}".format(API_URL, id)
-    try:
-      req.delete(url)
-    except Exception as e:
-        print(e)
+  url = "{}/{}".format(API_URL, id)
+  try:
+    req.delete(url)
+  except Exception as e:
+      print(e)
